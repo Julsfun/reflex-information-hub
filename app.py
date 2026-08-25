@@ -215,6 +215,15 @@ if st.button("Projekt analysieren"):
 
         if anwendung == "Druckhaltung":
 
+            st.markdown("#### Warum empfohlen?")
+
+            st.write(
+                "Die Anfrage enthält einen konkreten Planungsfall "
+                "für ein Bürogebäude mit dem Bedarf Druckhaltung. "
+                "Daher werden zuerst passende Druckhaltungslösungen, "
+                "technische Daten und Planungsunterlagen priorisiert."
+            )
+            
             st.success(
                 "Passende Reflex-Lösung für Druckhaltung"
             )
