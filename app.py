@@ -322,12 +322,6 @@ if st.button("Projekt analysieren"):
                                 f"{produkt['article_number']}"
                             )
 
-                        st.link_button(
-                            "Produktdetails bei Reflex öffnen",
-                            produkt["source_url"],
-                            use_container_width=True
-                        )
-
             else:
 
                 st.warning(
