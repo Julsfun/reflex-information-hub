@@ -8,6 +8,83 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown(
+    """
+    <style>
+
+    .stApp {
+        background-color: #ffffff;
+        color: #1f1f1f;
+    }
+
+    .block-container {
+        padding-top: 2.5rem;
+        padding-bottom: 3rem;
+        max-width: 1200px;
+    }
+
+    h1 {
+        font-size: 3rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.03em;
+        color: #202020 !important;
+        margin-bottom: 0.4rem !important;
+    }
+
+    h2, h3 {
+        color: #202020 !important;
+        font-weight: 600 !important;
+    }
+
+    p {
+        color: #4a4a4a;
+    }
+
+    div.stButton > button {
+        background-color: #202020;
+        color: white;
+        border: none;
+        border-radius: 2px;
+        padding: 0.7rem 1.4rem;
+        font-weight: 600;
+    }
+
+    div.stButton > button:hover {
+        background-color: #3b3b3b;
+        color: white;
+        border: none;
+    }
+
+    div[data-testid="stMetric"] {
+        background-color: #f6f6f4;
+        border: 1px solid #e8e8e5;
+        padding: 1rem;
+        border-radius: 2px;
+    }
+
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        border: 1px solid #e7e7e3 !important;
+        border-radius: 2px !important;
+        background-color: #fafafa;
+    }
+
+    .stProgress > div > div > div > div {
+        background-color: #222222;
+    }
+
+    div[data-testid="stAlert"] {
+        border-radius: 2px;
+    }
+
+    textarea {
+        border-radius: 2px !important;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # -----------------------------
 # Daten laden
 # -----------------------------
