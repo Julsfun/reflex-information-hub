@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from pathlib import Path
 
 st.set_page_config(
     page_title="Ask Reflex",
@@ -7,15 +8,33 @@ st.set_page_config(
     layout="wide"
 )
 
-produkte = pd.read_csv("product.csv")
+# -----------------------------
+# Daten laden
+# -----------------------------
+
+BASE_DIR = Path(__file__).parent
+produkte = pd.read_csv(BASE_DIR / "product.csv")
+
+# -----------------------------
+# Kopfbereich
+# -----------------------------
 
 st.title("Ask Reflex")
-st.write("Finden Sie schnell die richtigen Informationen für Ihr Projekt.")
+st.write(
+    "Finden Sie schnell die richtigen Informationen für Ihr Projekt."
+)
 
 frage = st.text_area(
     "Was möchten Sie erreichen?",
-    placeholder="Ich plane ein Bürogebäude und benötige eine Lösung für die Druckhaltung."
+    placeholder=(
+        "Ich plane ein Bürogebäude und benötige "
+        "eine Lösung für die Druckhaltung."
+    )
 )
+
+# -----------------------------
+# Analyse starten
+# -----------------------------
 
 if st.button("Projekt analysieren"):
 
@@ -26,34 +45,55 @@ if st.button("Projekt analysieren"):
     anwendung = "Allgemeine Anfrage"
     projektphase = "Nicht erkannt"
 
+    # -----------------------------
     # Nutzerrolle erkennen
-    if "plane" in text or "planer" in text or "planung" in text:
+    # -----------------------------
+
+    if (
+        "plane" in text
+        or "planer" in text
+        or "planung" in text
+    ):
         rolle = "TGA-Planer"
 
+    # -----------------------------
     # Gebäudetyp erkennen
+    # -----------------------------
+
     if "büro" in text or "office" in text:
         gebaeude = "Bürogebäude"
+
     elif "hotel" in text:
         gebaeude = "Hotel"
+
     elif "industrie" in text:
         gebaeude = "Industriegebäude"
 
+    # -----------------------------
     # Anwendung erkennen
+    # -----------------------------
+
     if "druckhaltung" in text:
         anwendung = "Druckhaltung"
+
     elif "bim" in text:
         anwendung = "BIM / Planungsdaten"
+
     elif "installation" in text:
         anwendung = "Installation"
 
+    # -----------------------------
     # Projektphase erkennen
+    # -----------------------------
+
     if "planung" in text or "plane" in text:
         projektphase = "Planung"
+
     elif "installation" in text:
         projektphase = "Ausführung"
 
     # -----------------------------
-    # Projektkontext
+    # Projektkontext anzeigen
     # -----------------------------
 
     st.subheader("Erkannter Projektkontext")
@@ -79,26 +119,40 @@ if st.button("Projekt analysieren"):
     st.subheader("Empfohlene Reflex-Inhalte")
 
     if anwendung == "Druckhaltung":
-        st.success("Passende Reflex-Lösung für Druckhaltung")
+
+        st.success(
+            "Passende Reflex-Lösung für Druckhaltung"
+        )
+
         st.write("📄 Technisches Datenblatt")
         st.write("🏗️ BIM-Modell")
         st.write("📝 Ausschreibungstext")
         st.write("🧮 Berechnung starten")
 
     elif anwendung == "BIM / Planungsdaten":
+
         st.success("BIM@Reflex")
+
         st.write("🏗️ BIM-Modell")
         st.write("📐 CAD-Daten")
         st.write("📄 Technische Produktdaten")
 
     elif anwendung == "Installation":
-        st.success("Installations- und Serviceinformationen")
+
+        st.success(
+            "Installations- und Serviceinformationen"
+        )
+
         st.write("🔧 Montageanleitung")
         st.write("📄 Inbetriebnahmehinweise")
         st.write("🛠️ Troubleshooting")
 
     else:
-        st.info("Bitte beschreiben Sie Ihr Projekt noch etwas genauer.")
+
+        st.info(
+            "Bitte beschreiben Sie Ihr Projekt "
+            "noch etwas genauer."
+        )
 
     # -----------------------------
     # Digital Project Profile
@@ -119,7 +173,8 @@ if st.button("Projekt analysieren"):
         st.write(f"**Projektphase:** {projektphase}")
 
     st.caption(
-        "Das Projektprofil entsteht automatisch aus den digitalen Interaktionen des Nutzers."
+        "Das Projektprofil entsteht automatisch "
+        "aus den digitalen Interaktionen des Nutzers."
     )
 
     # -----------------------------
@@ -147,38 +202,52 @@ if st.button("Projekt analysieren"):
     if "bim" in text:
         score += 10
 
-    if "datenblatt" in text or "ausschreibung" in text:
+    if (
+        "datenblatt" in text
+        or "ausschreibung" in text
+    ):
         score += 10
 
-    if "kontakt" in text or "beratung" in text:
+    if (
+        "kontakt" in text
+        or "beratung" in text
+    ):
         score += 20
 
-    if score > 100:
-        score = 100
+    score = min(score, 100)
 
     if score >= 70:
         status = "SQL"
+
     elif score >= 40:
         status = "MQL"
+
     else:
         status = "Marketing Contact"
 
     score_col1, score_col2 = st.columns(2)
 
     with score_col1:
-        st.metric("Lead Score", f"{score}/100")
+        st.metric(
+            "Lead Score",
+            f"{score}/100"
+        )
 
     with score_col2:
-        st.metric("Status", status)
+        st.metric(
+            "Status",
+            status
+        )
 
     st.progress(score / 100)
 
     st.caption(
-        "Der Lead Score bewertet den Projektkontext und die digitale Kaufabsicht."
+        "Der Lead Score bewertet den Projektkontext "
+        "und die digitale Kaufabsicht."
     )
 
     # -----------------------------
-    # Produktdaten aus product.csv
+    # Produktdaten
     # -----------------------------
 
     st.divider()
@@ -195,77 +264,72 @@ if st.button("Projekt analysieren"):
             )
         ]
 
-        if len(treffer) > 0:
+        if not treffer.empty:
 
             for _, produkt in treffer.iterrows():
 
-               for _, produkt in treffer.iterrows():
+                with st.container(border=True):
 
-    with st.container(border=True):
+                    st.markdown(
+                        f"### {produkt['product_name']}"
+                    )
 
-        st.markdown(f"### {produkt['product_name']}")
+                    st.write(
+                        produkt["description"]
+                    )
 
-        st.write(produkt["description"])
+                    produkt_col1, produkt_col2 = st.columns(2)
 
-        col1, col2 = st.columns(2)
+                    with produkt_col1:
 
-        with col1:
-            st.write(f"**Kategorie:** {produkt['category']}")
-            st.write(f"**Anwendung:** {produkt['application']}")
-            st.write(f"**Systemtyp:** {produkt['system_type']}")
+                        st.write(
+                            f"**Kategorie:** "
+                            f"{produkt['category']}"
+                        )
 
-        with col2:
-            st.write(
-                f"**Max. Betriebsdruck:** "
-                f"{produkt['max_operating_pressure']}"
-            )
-            st.write(f"**Steuerung:** {produkt['control']}")
-            st.write(f"**Artikelnummer:** {produkt['article_number']}")
+                        st.write(
+                            f"**Anwendung:** "
+                            f"{produkt['application']}"
+                        )
 
-        st.link_button(
-            "Produktdetails bei Reflex öffnen",
-            produkt["source_url"],
-            use_container_width=True
-        )
-    with st.container(border=True):
+                        st.write(
+                            f"**Systemtyp:** "
+                            f"{produkt['system_type']}"
+                        )
 
-        st.markdown(f"### {produkt['product_name']}")
+                    with produkt_col2:
 
-        st.write(produkt["description"])
+                        st.write(
+                            f"**Max. Betriebsdruck:** "
+                            f"{produkt['max_operating_pressure']}"
+                        )
 
-        col1, col2 = st.columns(2)
+                        st.write(
+                            f"**Steuerung:** "
+                            f"{produkt['control']}"
+                        )
 
-        with col1:
-            st.write(f"**Kategorie:** {produkt['category']}")
-            st.write(f"**Anwendung:** {produkt['application']}")
-            st.write(f"**Systemtyp:** {produkt['system_type']}")
+                        st.write(
+                            f"**Artikelnummer:** "
+                            f"{produkt['article_number']}"
+                        )
 
-        with col2:
-            st.write(
-                f"**Max. Betriebsdruck:** "
-                f"{produkt['max_operating_pressure']}"
-            )
-            st.write(f"**Steuerung:** {produkt['control']}")
-            st.write(f"**Artikelnummer:** {produkt['article_number']}")
-
-        st.link_button(
-            "Produktdetails bei Reflex öffnen",
-            produkt["source_url"],
-            use_container_width=True
-        )
-
-                st.link_button(
-                    "Produkt auf reflex-winkelmann.com öffnen",
-                    produkt["source_url"]
-                )
+                    st.link_button(
+                        "Produktdetails bei Reflex öffnen",
+                        produkt["source_url"],
+                        use_container_width=True
+                    )
 
         else:
+
             st.warning(
-                "Für diese Anwendung wurden noch keine Produktdaten gefunden."
+                "Für diese Anwendung wurden noch "
+                "keine Produktdaten gefunden."
             )
 
     else:
+
         st.info(
-            "Für diese Anfrage werden im nächsten Schritt weitere "
-            "Produktkategorien angebunden."
+            "Für diese Anfrage werden im nächsten "
+            "Schritt weitere Produktkategorien angebunden."
         )
