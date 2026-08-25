@@ -7,7 +7,7 @@ st.set_page_config(
     layout="wide"
 )
 
-produkte = pd.read_csv("products.csv")
+produkte = pd.read_csv("product.csv")
 
 st.title("Ask Reflex")
 st.write("Finden Sie schnell die richtigen Informationen für Ihr Projekt.")
@@ -178,7 +178,7 @@ if st.button("Projekt analysieren"):
     )
 
     # -----------------------------
-    # Produktdaten aus products.csv
+    # Produktdaten aus product.csv
     # -----------------------------
 
     st.divider()
