@@ -1,10 +1,13 @@
 import streamlit as st
+import pandas as pd
 
 st.set_page_config(
     page_title="Ask Reflex",
     page_icon="🔎",
     layout="wide"
 )
+
+produkte = pd.read_csv("products.csv")
 
 st.title("Ask Reflex")
 st.write("Finden Sie schnell die richtigen Informationen für Ihr Projekt.")
@@ -152,3 +155,27 @@ if st.button("Projekt analysieren"):
     st.caption(
         "Der Lead Score bewertet den Projektkontext und die digitale Kaufabsicht."
     )
+        st.divider()
+
+    st.subheader("Gefundene Produktdaten")
+
+    if anwendung == "Druckhaltung":
+        treffer = produkte[
+            produkte["category"].str.contains(
+                "Druckhaltung",
+                case=False,
+                na=False
+            )
+        ]
+
+        for _, produkt in treffer.iterrows():
+            st.write(f"**{produkt['product_name']}**")
+            st.write(produkt["description"])
+            st.write(f"**Anwendung:** {produkt['application']}")
+            st.write(f"**Max. Betriebsdruck:** {produkt['max_operating_pressure']}")
+            st.write(f"**Steuerung:** {produkt['control']}")
+            st.write(f"**Artikelnummer:** {produkt['article_number']}")
+            st.link_button(
+                "Produkt auf reflex-winkelmann.com öffnen",
+                produkt["source_url"]
+            )
