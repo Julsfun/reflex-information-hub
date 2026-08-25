@@ -199,31 +199,60 @@ if st.button("Projekt analysieren"):
 
             for _, produkt in treffer.iterrows():
 
-                st.write(f"### {produkt['product_name']}")
+               for _, produkt in treffer.iterrows():
 
-                st.write(produkt["description"])
+    with st.container(border=True):
 
-                prod_col1, prod_col2 = st.columns(2)
+        st.markdown(f"### {produkt['product_name']}")
 
-                with prod_col1:
-                    st.write(
-                        f"**Anwendung:** {produkt['application']}"
-                    )
-                    st.write(
-                        f"**Systemtyp:** {produkt['system_type']}"
-                    )
-                    st.write(
-                        f"**Artikelnummer:** {produkt['article_number']}"
-                    )
+        st.write(produkt["description"])
 
-                with prod_col2:
-                    st.write(
-                        f"**Max. Betriebsdruck:** "
-                        f"{produkt['max_operating_pressure']}"
-                    )
-                    st.write(
-                        f"**Steuerung:** {produkt['control']}"
-                    )
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.write(f"**Kategorie:** {produkt['category']}")
+            st.write(f"**Anwendung:** {produkt['application']}")
+            st.write(f"**Systemtyp:** {produkt['system_type']}")
+
+        with col2:
+            st.write(
+                f"**Max. Betriebsdruck:** "
+                f"{produkt['max_operating_pressure']}"
+            )
+            st.write(f"**Steuerung:** {produkt['control']}")
+            st.write(f"**Artikelnummer:** {produkt['article_number']}")
+
+        st.link_button(
+            "Produktdetails bei Reflex öffnen",
+            produkt["source_url"],
+            use_container_width=True
+        )
+    with st.container(border=True):
+
+        st.markdown(f"### {produkt['product_name']}")
+
+        st.write(produkt["description"])
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.write(f"**Kategorie:** {produkt['category']}")
+            st.write(f"**Anwendung:** {produkt['application']}")
+            st.write(f"**Systemtyp:** {produkt['system_type']}")
+
+        with col2:
+            st.write(
+                f"**Max. Betriebsdruck:** "
+                f"{produkt['max_operating_pressure']}"
+            )
+            st.write(f"**Steuerung:** {produkt['control']}")
+            st.write(f"**Artikelnummer:** {produkt['article_number']}")
+
+        st.link_button(
+            "Produktdetails bei Reflex öffnen",
+            produkt["source_url"],
+            use_container_width=True
+        )
 
                 st.link_button(
                     "Produkt auf reflex-winkelmann.com öffnen",
