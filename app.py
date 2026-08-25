@@ -102,3 +102,53 @@ if st.button("Projekt analysieren"):
     st.caption(
         "Das Projektprofil entsteht automatisch aus den digitalen Interaktionen des Nutzers."
     )
+    st.divider()
+
+    st.subheader("Lead Score")
+
+    score = 0
+
+    if rolle != "Unbekannt":
+        score += 15
+
+    if gebaeude != "Nicht erkannt":
+        score += 15
+
+    if anwendung != "Allgemeine Anfrage":
+        score += 25
+
+    if projektphase != "Nicht erkannt":
+        score += 20
+
+    if "bim" in text:
+        score += 10
+
+    if "datenblatt" in text or "ausschreibung" in text:
+        score += 10
+
+    if "kontakt" in text or "beratung" in text:
+        score += 20
+
+    if score > 100:
+        score = 100
+
+    if score >= 70:
+        status = "SQL"
+    elif score >= 40:
+        status = "MQL"
+    else:
+        status = "Marketing Contact"
+
+    score_col1, score_col2 = st.columns(2)
+
+    with score_col1:
+        st.metric("Lead Score", f"{score}/100")
+
+    with score_col2:
+        st.metric("Status", status)
+
+    st.progress(score / 100)
+
+    st.caption(
+        "Der Lead Score bewertet den Projektkontext und die digitale Kaufabsicht."
+    )
