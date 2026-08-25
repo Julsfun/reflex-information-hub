@@ -26,9 +26,11 @@ if st.button("Projekt analysieren"):
     anwendung = "Allgemeine Anfrage"
     projektphase = "Nicht erkannt"
 
+    # Nutzerrolle erkennen
     if "plane" in text or "planer" in text or "planung" in text:
         rolle = "TGA-Planer"
 
+    # Gebäudetyp erkennen
     if "büro" in text or "office" in text:
         gebaeude = "Bürogebäude"
     elif "hotel" in text:
@@ -36,6 +38,7 @@ if st.button("Projekt analysieren"):
     elif "industrie" in text:
         gebaeude = "Industriegebäude"
 
+    # Anwendung erkennen
     if "druckhaltung" in text:
         anwendung = "Druckhaltung"
     elif "bim" in text:
@@ -43,10 +46,15 @@ if st.button("Projekt analysieren"):
     elif "installation" in text:
         anwendung = "Installation"
 
+    # Projektphase erkennen
     if "planung" in text or "plane" in text:
         projektphase = "Planung"
     elif "installation" in text:
         projektphase = "Ausführung"
+
+    # -----------------------------
+    # Projektkontext
+    # -----------------------------
 
     st.subheader("Erkannter Projektkontext")
 
@@ -63,6 +71,10 @@ if st.button("Projekt analysieren"):
 
     with col4:
         st.metric("Projektphase", projektphase)
+
+    # -----------------------------
+    # Empfohlene Inhalte
+    # -----------------------------
 
     st.subheader("Empfohlene Reflex-Inhalte")
 
@@ -88,6 +100,10 @@ if st.button("Projekt analysieren"):
     else:
         st.info("Bitte beschreiben Sie Ihr Projekt noch etwas genauer.")
 
+    # -----------------------------
+    # Digital Project Profile
+    # -----------------------------
+
     st.divider()
 
     st.subheader("Digital Project Profile")
@@ -105,6 +121,11 @@ if st.button("Projekt analysieren"):
     st.caption(
         "Das Projektprofil entsteht automatisch aus den digitalen Interaktionen des Nutzers."
     )
+
+    # -----------------------------
+    # Lead Score
+    # -----------------------------
+
     st.divider()
 
     st.subheader("Lead Score")
@@ -155,11 +176,17 @@ if st.button("Projekt analysieren"):
     st.caption(
         "Der Lead Score bewertet den Projektkontext und die digitale Kaufabsicht."
     )
-        st.divider()
+
+    # -----------------------------
+    # Produktdaten aus products.csv
+    # -----------------------------
+
+    st.divider()
 
     st.subheader("Gefundene Produktdaten")
 
     if anwendung == "Druckhaltung":
+
         treffer = produkte[
             produkte["category"].str.contains(
                 "Druckhaltung",
@@ -168,14 +195,48 @@ if st.button("Projekt analysieren"):
             )
         ]
 
-        for _, produkt in treffer.iterrows():
-            st.write(f"**{produkt['product_name']}**")
-            st.write(produkt["description"])
-            st.write(f"**Anwendung:** {produkt['application']}")
-            st.write(f"**Max. Betriebsdruck:** {produkt['max_operating_pressure']}")
-            st.write(f"**Steuerung:** {produkt['control']}")
-            st.write(f"**Artikelnummer:** {produkt['article_number']}")
-            st.link_button(
-                "Produkt auf reflex-winkelmann.com öffnen",
-                produkt["source_url"]
+        if len(treffer) > 0:
+
+            for _, produkt in treffer.iterrows():
+
+                st.write(f"### {produkt['product_name']}")
+
+                st.write(produkt["description"])
+
+                prod_col1, prod_col2 = st.columns(2)
+
+                with prod_col1:
+                    st.write(
+                        f"**Anwendung:** {produkt['application']}"
+                    )
+                    st.write(
+                        f"**Systemtyp:** {produkt['system_type']}"
+                    )
+                    st.write(
+                        f"**Artikelnummer:** {produkt['article_number']}"
+                    )
+
+                with prod_col2:
+                    st.write(
+                        f"**Max. Betriebsdruck:** "
+                        f"{produkt['max_operating_pressure']}"
+                    )
+                    st.write(
+                        f"**Steuerung:** {produkt['control']}"
+                    )
+
+                st.link_button(
+                    "Produkt auf reflex-winkelmann.com öffnen",
+                    produkt["source_url"]
+                )
+
+        else:
+            st.warning(
+                "Für diese Anwendung wurden noch keine Produktdaten gefunden."
             )
+
+    else:
+        st.info(
+            "Für diese Anfrage werden im nächsten Schritt weitere "
+            "Produktkategorien angebunden."
+        )
