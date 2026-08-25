@@ -21,6 +21,7 @@ if st.button("Projekt analysieren"):
     rolle = "Unbekannt"
     gebaeude = "Nicht erkannt"
     anwendung = "Allgemeine Anfrage"
+    projektphase = "Nicht erkannt"
 
     if "plane" in text or "planer" in text or "planung" in text:
         rolle = "TGA-Planer"
@@ -39,9 +40,14 @@ if st.button("Projekt analysieren"):
     elif "installation" in text:
         anwendung = "Installation"
 
+    if "planung" in text or "plane" in text:
+        projektphase = "Planung"
+    elif "installation" in text:
+        projektphase = "Ausführung"
+
     st.subheader("Erkannter Projektkontext")
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         st.metric("Rolle", rolle)
@@ -51,6 +57,9 @@ if st.button("Projekt analysieren"):
 
     with col3:
         st.metric("Anwendung", anwendung)
+
+    with col4:
+        st.metric("Projektphase", projektphase)
 
     st.subheader("Empfohlene Reflex-Inhalte")
 
@@ -75,3 +84,21 @@ if st.button("Projekt analysieren"):
 
     else:
         st.info("Bitte beschreiben Sie Ihr Projekt noch etwas genauer.")
+
+    st.divider()
+
+    st.subheader("Digital Project Profile")
+
+    profil_col1, profil_col2 = st.columns(2)
+
+    with profil_col1:
+        st.write(f"**Nutzerrolle:** {rolle}")
+        st.write(f"**Gebäudetyp:** {gebaeude}")
+
+    with profil_col2:
+        st.write(f"**Anwendung:** {anwendung}")
+        st.write(f"**Projektphase:** {projektphase}")
+
+    st.caption(
+        "Das Projektprofil entsteht automatisch aus den digitalen Interaktionen des Nutzers."
+    )
