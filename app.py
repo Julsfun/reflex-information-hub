@@ -121,7 +121,10 @@ if st.button("Projekt analysieren"):
     gebaeude = "Nicht erkannt"
     anwendung = "Allgemeine Anfrage"
     projektphase = "Nicht erkannt"
-
+    kunden_tab, sales_tab = st.tabs(
+        ["Kundensicht", "Sales-Sicht"]
+    )
+    
     # -----------------------------
     # Nutzerrolle erkennen
     # -----------------------------
